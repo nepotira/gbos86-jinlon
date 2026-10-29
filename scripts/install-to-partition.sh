@@ -180,6 +180,7 @@ if [ "$APPLY" -eq 0 ]; then
     else
         echo " 12. Add menuentry to /etc/grub.d/40_custom and run sudo update-grub"
     fi
+    echo " 13. Verify and harden host /etc/default/grub with GRUB_GFXPAYLOAD_LINUX=keep (ADR-0003)"
     echo "[DRY-RUN] No changes were written to any disk."
     exit 0
 fi
@@ -338,6 +339,31 @@ menuentry "Googlebook OS (gbOS86 persistent)" --class android --class gnu-linux 
     chainloader /EFI/BOOT/BOOTX64.EFI
 }
 GRUB_EOF
+        sudo update-grub
+    fi
+fi
+
+# Harden host GRUB configuration against UEFI GOP black screen (ADR-0003)
+if [ -f "/etc/default/grub" ]; then
+    echo "==> Hardening host GRUB configuration against UEFI GOP black screen (ADR-0003)..."
+    GRUB_MODIFIED=0
+    if ! grep -q "^GRUB_GFXPAYLOAD_LINUX=" /etc/default/grub; then
+        echo "  Adding GRUB_GFXPAYLOAD_LINUX=keep to /etc/default/grub..."
+        echo "GRUB_GFXPAYLOAD_LINUX=keep" | sudo tee -a /etc/default/grub >/dev/null
+        GRUB_MODIFIED=1
+    fi
+    if ! grep -q "^GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
+        echo "  Adding GRUB_RECORDFAIL_TIMEOUT=10 to /etc/default/grub..."
+        echo "GRUB_RECORDFAIL_TIMEOUT=10" | sudo tee -a /etc/default/grub >/dev/null
+        GRUB_MODIFIED=1
+    fi
+    if ! grep -q "^GRUB_GFXMODE=" /etc/default/grub; then
+        echo "  Adding GRUB_GFXMODE=1920x1280,auto to /etc/default/grub..."
+        echo "GRUB_GFXMODE=1920x1280,auto" | sudo tee -a /etc/default/grub >/dev/null
+        GRUB_MODIFIED=1
+    fi
+    if [ "$GRUB_MODIFIED" -eq 1 ] && command -v update-grub >/dev/null 2>&1; then
+        echo "  Regenerating GRUB configuration..."
         sudo update-grub
     fi
 fi

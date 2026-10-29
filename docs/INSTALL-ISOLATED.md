@@ -42,6 +42,16 @@ Proposed new partitions inside unallocated space:
 - **User Experience**: Googlebook OS appears as a selection in the standard GRUB bootloader menu on every startup.
 - **Impact on Host**: Edits one text file (`/etc/grub.d/40_custom`) and regenerates `/boot/grub/grub.cfg`. Reversible by deleting the entry and running `update-grub`.
 
+### Host GRUB Safety: UEFI GOP Framebuffer Preservation (ADR-0003)
+On coreboot / MrChromebox EDK2 UEFI firmware, video is provided solely via UEFI GOP (no legacy 16-bit VGA BIOS). If the host Debian/Ubuntu GRUB triggers its fallback mode (`recordfail=1`), it defaults to `linux_gfx_mode=text`, disabling the GOP framebuffer and causing a black screen on subsequent boots of the host OS.
+To shield against this, `/etc/default/grub` must include:
+```sh
+GRUB_GFXPAYLOAD_LINUX=keep
+GRUB_RECORDFAIL_TIMEOUT=10
+GRUB_GFXMODE=1920x1280,auto
+```
+This is automatically validated and applied by `scripts/install-to-partition.sh`.
+
 ---
 
 ## 3. Step-by-Step Procedure
@@ -62,6 +72,8 @@ Proposed new partitions inside unallocated space:
    - Copy `BOOTX64.EFI` to `/boot/efi/EFI/gbos/BOOTX64.EFI`.
 5. **Boot Registration**:
    - Apply Option A or Option B as explicitly instructed by the user.
+6. **Host GRUB Hardening (ADR-0003)**:
+   - Ensure `GRUB_GFXPAYLOAD_LINUX=keep` is set in `/etc/default/grub` to prevent UEFI GOP framebuffer teardown and black screens.
 
 ---
 
