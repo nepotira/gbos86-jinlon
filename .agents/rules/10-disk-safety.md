@@ -5,3 +5,6 @@
 - Fora isso, a única escrita em disco bruto é o `dd` no pendrive (ETAPA 2, Argon), depois do meu "sim" sobre o dispositivo. Nunca no `nvme0n1` nem em disco com partição montada em `/` ou `/boot`.
 - Não apague nada fora de `~/gbos-work`, `/mnt/gbwork` e arquivos criados pelo agente. Não reinicie sem avisar. Não use Ventoy.
 - Não commite nem distribua imagens, bibliotecas, firmware ou qualquer arquivo da Google ou de terceiros.
+
+## Exceção da ETAPA 7 (instalação isolada, Argon)
+Pode criar até 3 partições (`GBOSSYS`, `GBOS_META` opcional, `GBOS_DATA`) exclusivamente dentro do trecho não alocado, formatar apenas essas, e copiar arquivos do pendrive para elas e para `/EFI/gbos/` da ESP. Exige: backup da tabela (`sfdisk -d` e `sgdisk --backup`), backup do conteúdo da ESP, `efibootmgr -v` salvo (leitura), dry-run mostrado e meu "sim". Continua proibido: alterar, redimensionar, mover ou formatar partições existentes, apagar arquivos existentes da ESP, mexer em initramfs. Alterar o GRUB ou criar entrada UEFI só pelo método que EU escolher.
