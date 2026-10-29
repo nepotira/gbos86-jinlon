@@ -1,0 +1,25 @@
+# Agent local memory (never versioned)
+.agents/memory/
+
+# Build directories and artifacts
+build/
+out/
+work/
+tmp/
+*.img
+*.iso
+*.zip
+*.xz
+*.zst
+*.tar.gz
+*.ri
+*.tplg
+*.bin
+jinlon-pack*
+
+# Raw logs and backups
+*.log
+*.raw
+*.bak
+*.bak-*
+logs/
