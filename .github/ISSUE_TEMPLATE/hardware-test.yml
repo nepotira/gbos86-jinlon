@@ -1,0 +1,64 @@
+name: Hardware Test Report
+description: Report hardware component test results on HP Elite c1030 (Jinlon)
+title: "[Hardware]: "
+labels: ["hardware", "test-report"]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which hardware subsystem or component was tested?
+      options:
+        - Boot / EFI
+        - Display / 3:2 Panel / Backlight
+        - Audio (Speakers - MAX98357A)
+        - Audio (Headphone Jack - RT5682)
+        - Audio (Internal Microphone - SOF DMIC)
+        - Keyboard / Backlight
+        - Touchpad / Touchscreen / USI Stylus
+        - Wi-Fi / Bluetooth (Intel AX201)
+        - Webcam
+        - USB-C / Thunderbolt / Charging
+        - Suspend / Resume
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      description: Observed status backed by concrete evidence
+      options:
+        - Works
+        - Partial
+        - Broken
+        - Not tested
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Repository and Upstream Version
+      description: Tag/commit of this repository and upstream GooglebookOS / recovery image version
+      placeholder: "v0.1.0 / upstream r126"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps and Procedure
+      description: Exact steps performed to test the component
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized Logs and Evidence
+      description: Paste relevant dmesg, alsa, or kernel output (ensure all MACs, UUIDs, hardware IDs, and local usernames are removed)
+      render: shell
+    validations:
+      required: true
