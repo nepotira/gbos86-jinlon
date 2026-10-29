@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
 - First hardware test report from live USB boot on HP Elite c1030 (`jinlon`) in `docs/test-reports/2026-10-29-live-usb-boot.md`.
 
@@ -18,4 +20,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Recorded resolution of GitHub issue #1 (Live USB boot test) and updated issue #2 (Audio verification).
+
 
