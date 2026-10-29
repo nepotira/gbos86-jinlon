@@ -1,0 +1,10 @@
+# Git and Versioning Rules
+
+- **Setup (uma vez)**: confirme `gh` (instale pelo apt se faltar) e `gh auth status`. Se não estiver logado, PARE e me peça para rodar `gh auth login` eu mesmo; nunca peça token. Configure SOMENTE no repositório: `user.name` = meu nome ou login do GitHub; `user.email` = `<id>+<login>@users.noreply.github.com` (obtenha com `gh api user`); `core.hooksPath=.githooks`. Sem trailers "Co-authored-by" de IA, a menos que eu peça.
+- **Repositório**: `gbos86-jinlon`, branch padrão `main`, licença MIT (só para arquivos meus).
+- **Branches**: `main` sempre estável. Trabalho em `feat/*`, `fix/*`, `docs/*`, `test/*`, `chore/*`. Depois da publicação inicial, toda mudança entra por PR (`gh pr create`), squash merge, branch apagada depois. Nada de commit direto na `main`.
+- **Commits**: Conventional Commits em inglês (`feat`, `fix`, `docs`, `test`, `chore`, `refactor`); assunto no imperativo com até 72 caracteres; corpo explicando o porquê; commits pequenos e atômicos; `Closes #N` quando houver issue.
+- **Versionamento**: SemVer com tags anotadas `vMAJOR.MINOR.PATCH`. Fase `0.y.z` até existir um boot documentado e reproduzível (aí vira `1.0.0`). `MINOR`: novo resultado de teste, componente documentado ou script. `PATCH`: correção de texto, link ou bug em script. `MAJOR` (após 1.0): mudança incompatível no procedimento. `CHANGELOG.md` no formato Keep a Changelog com seção `[Unreleased]`; a cada release, mova as entradas para a nova versão e rode `gh release create` com as notas.
+- **Issues**: um por problema (som, touchpad, Wi-Fi, boot...), com rótulos `hardware`, `audio`, `boot`, `docs`, `test-report`, `upstream`.
+- **Segurança**: o hook `pre-commit` roda `scripts/scan-sensitive.sh`. Nunca use `--no-verify`.
+- **Documentação**: `README.md` (inglês) e `README.pt-BR.md` em sincronia; `docs/INSTALL.md`, `HARDWARE.md`, `AUDIO.md`, `PARTITIONING.md`, `TROUBLESHOOTING.md`; relatórios em `docs/test-reports/AAAA-MM-DD-titulo.md`; decisões em `docs/decisions/NNNN-titulo.md` (ADR curto). A tabela de status só mostra o que tem evidência; o resto é "not tested".
