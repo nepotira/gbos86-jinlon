@@ -22,17 +22,18 @@ Todos os componentes abaixo permanecem como `not tested` até que sejam verifica
 
 | Componente | Status | Notas / Evidências |
 | :--- | :--- | :--- |
-| Boot (USB live / instalador) | `not tested` | Aguardando teste em hardware |
-| Boot (partição dedicada no NVMe) | `not tested` | Aguardando teste em hardware |
-| Tela (painel 3:2, resolução, escala) | `not tested` | Aguardando teste em hardware |
-| Controle de brilho (tela e teclado) | `not tested` | Aguardando teste em hardware |
-| Touchscreen e caneta USI | `not tested` | Aguardando teste em hardware |
-| Touchpad e teclado | `not tested` | Aguardando teste em hardware |
-| Áudio — Alto-falantes internos (`max98357a`) | `not tested` | Aguardando teste em hardware |
-| Áudio — Conector P2 3.5mm (`rt5682`) | `not tested` | Aguardando teste em hardware |
-| Áudio — Microfone interno (SOF DMIC) | `not tested` | Aguardando teste em hardware |
-| Wi-Fi (`iwlwifi` / AX201) | `not tested` | Aguardando teste em hardware |
-| Bluetooth | `not tested` | Aguardando teste em hardware |
+| Boot (USB live / instalador) | **Works** | Verificado em teste de live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Boot (partição dedicada no NVMe) | `not tested` | Aguardando teste de instalação em partição |
+| Tela (painel 3:2, resolução, escala) | **Works** | Verificado em 1920x1280 (`DENSITY=180`) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Controle de brilho (tela e teclado) | `not tested` | Aguardando verificação explícita |
+| Touchscreen e caneta USI | **Partial** | Touchscreen funcionando; caneta USI não testada (sem hardware) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Touchpad e teclado | **Works** | Touchpad responsivo com suporte a gestos ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Áudio — Alto-falantes internos (`max98357a`) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Áudio — Conector P2 3.5mm (`rt5682`) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Áudio — Microfone interno (SOF DMIC) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Wi-Fi (`iwlwifi` / AX201) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Bluetooth | **Works** | Verificado em funcionamento no live USB (`8087:0026`) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Giroscópio / Auto-rotação de tela | **Broken** | HAL de sensores falha ao detectar sensores de orientação ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Webcam | `not tested` | Aguardando teste em hardware |
 | USB-C / Thunderbolt / carregamento PD | `not tested` | Aguardando teste em hardware |
 | Suspensão / Retomada (S0ix) | `not tested` | Aguardando teste em hardware |

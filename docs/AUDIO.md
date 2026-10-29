@@ -13,10 +13,10 @@
 
 | Audio Path | Codec / Driver | Status | Notes |
 | :--- | :--- | :--- | :--- |
-| Internal Speakers | `max98357a` + SOF | `not tested` | Pending hardware test |
-| 3.5mm Headset Output | `rt5682` + SOF | `not tested` | Pending hardware test |
-| 3.5mm Headset Mic | `rt5682` + SOF | `not tested` | Pending hardware test |
-| Internal DMIC | SOF DMIC | `not tested` | Pending hardware test |
+| Internal Speakers | `max98357a` + SOF | **Works** | Verified working in live USB test ([report](test-reports/2026-10-29-live-usb-boot.md)) |
+| 3.5mm Headset Output | `rt5682` + SOF | **Works** | Verified working in live USB test ([report](test-reports/2026-10-29-live-usb-boot.md)) |
+| 3.5mm Headset Mic | `rt5682` + SOF | `not tested` | Headphone output verified; mic jack path unverified |
+| Internal DMIC | SOF DMIC | **Works** | Verified working in live USB test ([report](test-reports/2026-10-29-live-usb-boot.md)) |
 | HDMI / USB-C DP Audio | `snd_hda_codec_hdmi` | `not tested` | Pending hardware test |
 
 > [!NOTE]
