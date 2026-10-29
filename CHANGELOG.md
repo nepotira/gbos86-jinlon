@@ -8,8 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial repository structure, MIT license, and `.gitignore` rules preventing binary/firmware and private data commits.
-- Pre-commit hook and `scripts/scan-sensitive.sh` scanner for sensitive patterns, hardware identifiers, and oversized files.
-- Agent rules (`.agents/rules/`) and workflows/skills (`test-report`, `release`).
-- Bilingual documentation (`README.md` and `README.pt-BR.md`) and initial documentation skeletons in `docs/`.
-- GitHub Issue and Pull Request templates.
+- First hardware test report from live USB boot on HP Elite c1030 (`jinlon`) in `docs/test-reports/2026-10-29-live-usb-boot.md`.
+
+### Changed
+- Updated hardware compatibility tables in `README.md`, `README.pt-BR.md`, and `docs/AUDIO.md` with verified status:
+  - Works: live USB boot, 3:2 display (1920x1280), touchpad, touchscreen, SOF audio (speakers, headset jack, internal DMIC), Wi-Fi (AX201), Bluetooth.
+  - Partial: Touchscreen & USI stylus (touchscreen works; USI stylus not tested).
+  - Broken: Accelerometer / Gyroscope auto-rotation (sensor HAL reports `Cannot detect sensors`).
+
+### Fixed
+- Recorded resolution of GitHub issue #1 (Live USB boot test) and updated issue #2 (Audio verification).
+

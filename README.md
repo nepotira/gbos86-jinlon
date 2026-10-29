@@ -22,17 +22,18 @@ Every component below defaults to `not tested` until verified on real hardware w
 
 | Component | Status | Notes / Evidence |
 | :--- | :--- | :--- |
-| Boot (USB live / installer) | `not tested` | Pending hardware test |
-| Boot (NVMe dedicated partition) | `not tested` | Pending hardware test |
-| Display (3:2 panel, resolution, scaling) | `not tested` | Pending hardware test |
-| Backlight control (screen & keyboard) | `not tested` | Pending hardware test |
-| Touchscreen & USI stylus | `not tested` | Pending hardware test |
-| Touchpad & keyboard | `not tested` | Pending hardware test |
-| Audio — Internal speakers (`max98357a`) | `not tested` | Pending hardware test |
-| Audio — 3.5mm headset jack (`rt5682`) | `not tested` | Pending hardware test |
-| Audio — Internal microphone (SOF DMIC) | `not tested` | Pending hardware test |
-| Wi-Fi (`iwlwifi` / AX201) | `not tested` | Pending hardware test |
-| Bluetooth | `not tested` | Pending hardware test |
+| Boot (USB live / installer) | **Works** | Verified in live USB test ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Boot (NVMe dedicated partition) | `not tested` | Pending partition installation test |
+| Display (3:2 panel, resolution, scaling) | **Works** | Verified at 1920x1280 (`DENSITY=180`) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Backlight control (screen & keyboard) | `not tested` | Pending explicit verification |
+| Touchscreen & USI stylus | **Partial** | Touchscreen works; USI stylus not tested (no hardware) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Touchpad & keyboard | **Works** | Touchpad responsive with gestures ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Audio — Internal speakers (`max98357a`) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Audio — 3.5mm headset jack (`rt5682`) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Audio — Internal microphone (SOF DMIC) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Wi-Fi (`iwlwifi` / AX201) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Bluetooth | **Works** | Verified working in live USB (`8087:0026`) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Auto-Rotate / Gyroscope | **Broken** | Sensor HAL fails to detect orientation sensors ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Webcam | `not tested` | Pending hardware test |
 | USB-C / Thunderbolt / PD charging | `not tested` | Pending hardware test |
 | Suspend / Resume (S0ix) | `not tested` | Pending hardware test |
