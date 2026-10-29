@@ -14,4 +14,11 @@
   - Speaker Amplifiers: Maxim `max98357a` (ACPI `MX98357A`)
   - Microphone: Digital Microphone array (PCH DMIC via SOF)
 - **Wireless**: Intel Wi-Fi 6 AX201 160MHz + Bluetooth 5.x
+- **Sensors Subsystem**:
+  - Embedded Controller: Google ChromeOS EC (`GOOG0004:00`, `cros_ec_lpcs`)
+  - Sensor Hub: `cros_ec_sensorhub`
+  - Accelerometers: Base (`cros-ec-accel`) + Lid (`cros-ec-accel`)
+  - Gyroscope: `cros-ec-gyro`
+  - Lid Angle Sensor: `cros-ec-lid-angle` (360-degree convertible hinge detection)
+  - Upstream Status: Requires `CONFIG_IIO_CROS_EC_SENSORS` / `cros_ec_sensors` modules in the kernel; currently missing in gbOS86 #42 build.
 - **Storage**: NVMe PCIe SSD (`/dev/nvme0n1`, 119.2 GiB)
