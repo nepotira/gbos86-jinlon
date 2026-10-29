@@ -1,0 +1,24 @@
+# Environment Summary (ENV)
+
+- **Machine**: HP Elite c1030 Chromebook (`jinlon`, rev5, Intel Comet Lake)
+- **OS**: Zorin OS 18.1 (Ubuntu 24.04 `noble` base)
+- **Kernel**: `7.0.0-42-generic` (`x86_64`)
+- **Memory**: 15 GiB RAM (10 GiB available), 2.0 GiB Swap
+- **Primary Disk (`/dev/nvme0n1`)**: WDC PC SN520 SDAPTUW-128G-1006, 122,104 MiB (~119.24 GiB)
+  - `nvme0n1p1`: `2.00 MiB` to `4098 MiB` (`4096 MiB`), `fat32`, `/boot/efi` (ESP — DO NOT TOUCH)
+  - `nvme0n1p2`: `4098 MiB` to `4114 MiB` (`16.0 MiB`), Microsoft reserved
+  - `nvme0n1p3`: `4114 MiB` to `75852 MiB` (`71738 MiB`), `ext4`, `/` (Zorin OS — DO NOT TOUCH; 43,769 MiB / ~42.7 GiB free)
+  - **Unallocated space**: `75852 MiB` to `122104 MiB` (`46252 MiB` / ~45.17 GiB free)
+- **External USB (`/dev/sda`)**: 7.2 GiB (`sda1` vfat `PENDRIVE` mounted at `/media/nepo/PENDRIVE`)
+- **Paths**:
+  - Repository: `~/gbos-work/gbos86-jinlon`
+  - External Build Directory (`BUILD_DIR`): `~/gbos-work/build`
+  - Hardware Diagnostic Pack: `~/jinlon-pack` and `~/jinlon-pack.tar.gz`
+- **Tool Versions**:
+  - `git`: `2.43.0`
+  - `python3`: `/usr/bin/python3`
+  - `curl`: `/usr/bin/curl`
+  - `docker`: `29.1.3` (`docker.io`, `nepo` added to `docker` group, default data-root `/var/lib/docker`)
+  - `gh`: `2.103.3` (authenticated as `nepotira`)
+- **Host Audio Status (Zorin OS)**:
+  - ALSA card 0 detected as `sofrt5682 [sof-rt5682]` (`HP-Jinlon-rev5`), with Playback devices `Port1` (0), `HDMI1..3` (2..4), and `Speakers` (5).
