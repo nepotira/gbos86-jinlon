@@ -79,15 +79,38 @@ jobs:
               f.write(new_content)
           print("Successfully patched configure_whl.py with Jinlon overrides.")
 
-          # 2. Relax tarball sha256 check and add clang symlink in fetch_kernel_sources.sh
+          # 2. Use reliable git shallow fetch instead of flaky dynamic gitiles tarball
           fks_path = "/tmp/gbos-x86/kernel/fetch_kernel_sources.sh"
           with open(fks_path, "r", encoding="utf-8") as f:
               fks = f.read()
-          fks = fks.replace('[ "$got" = "$KSRC_SHA" ] || die', 'echo "archive sha: $got" # [ "$got" = "$KSRC_SHA" ] || die')
+
+          target_dl = """  say "kernel source: android.googlesource.com kernel/common @ $KSRC_COMMIT"
+  [ -f "$DL/$KSRC_TAR" ] || curl -fL --retry 5 -o "$DL/$KSRC_TAR" \\
+    "https://android.googlesource.com/kernel/common/+archive/$KSRC_COMMIT.tar.gz"
+  got=$(sha "$DL/$KSRC_TAR")
+  [ "$got" = "$KSRC_SHA" ] || die "sha256 mismatch for $KSRC_TAR ($got); delete it and retry"
+  docker run --rm -v "$VOL":/build -v "$DL":/dl:ro debian:trixie \\
+    bash -c "set -e; mkdir -p /build/src; tar -xzf /dl/$KSRC_TAR -C /build/src\""""
+
+          repl_dl = """  say "kernel source: shallow git fetch from android.googlesource.com @ $KSRC_COMMIT"
+  rm -rf "$DL/src"
+  mkdir -p "$DL/src"
+  git -C "$DL/src" init
+  git -C "$DL/src" remote add origin https://android.googlesource.com/kernel/common
+  git -C "$DL/src" fetch --depth 1 origin "$KSRC_COMMIT"
+  git -C "$DL/src" checkout FETCH_HEAD
+  docker run --rm -v "$VOL":/build -v "$DL/src":/dl/src:ro debian:trixie \\
+    bash -c "set -e; mkdir -p /build/src; cp -a /dl/src/. /build/src/; rm -rf /build/src/.git\""""
+
+          if target_dl not in fks:
+              print(f"ERROR: target_dl not found in {fks_path}", file=sys.stderr)
+              sys.exit(1)
+
+          fks = fks.replace(target_dl, repl_dl, 1)
           fks = fks.replace('cp -a /dl/clang-prebuilts/$CLANG_DIR /build/inputs/', 'cp -a /dl/clang-prebuilts/$CLANG_DIR /build/inputs/; ln -sf $CLANG_DIR /build/inputs/clang-r584948c')
           with open(fks_path, "w", encoding="utf-8") as f:
               f.write(fks)
-          print("Successfully patched fetch_kernel_sources.sh (gitiles dynamic archive + clang-r584948c symlink).")
+          print("Successfully patched fetch_kernel_sources.sh (git pack protocol + clang-r584948c symlink).")
 
           # 3. Fix Clang directory reference in build_kernel.sh
           bk_path = "/tmp/gbos-x86/kernel/build_kernel.sh"
