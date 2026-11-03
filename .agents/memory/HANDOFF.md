@@ -229,14 +229,27 @@
     - Implantado o novo `BOOTX64.EFI` em `/boot/efi/EFI/gbos/BOOTX64.EFI` e em `GBOSSYS/EFI/BOOT/BOOTX64.EFI`.
     - Extraída a nova árvore de módulos assinados correspondentes ao build #44 (`build-id: 6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`) em `GBOSSYS/gbos/modules/lib/modules/6.18.21-gbos-whl/`.
     - Sincronizados os discos e desmontado `GBOSSYS` com sucesso.
+  - **Fases de Otimização Absoluta de Hardware (HP c1030 / i7-10610U)**:
+    - Desativado o rastreamento KVM ftrace contínuo em `GBOSSYS/gbos/hook.sh` (elimina 17,6 MB de I/O contínuo).
+    - Criado e implantado o serviço nativo `GBOSSYS/gbos/optimize.sh` (rastreado em `scripts/optimize.sh`):
+      - CPU: Intel Speed Shift HWP EPP em `balance_performance`, governor `schedutil`, turbo desbloqueado até 4.90 GHz.
+      - Power: Intel RAPL configurado com PL1=22W e PL2=35W para evitar throttling a 800 MHz.
+      - GPU: Intel UHD 620 com piso de clock elevado para 500 MHz (teto 1150 MHz).
+      - RAM: `vm.swappiness=10` e `vfs_cache_pressure=50` para retenção máxima de apps nos 16 GB LPDDR4x.
+      - I/O: NVMe SSD com escalonador `none` e read-ahead de 512 KB.
+      - Debug: Console printk silenciado para loglevel 3 em runtime (sem engasgo síncrono no framebuffer).
+      - VM: Finalização forçada de máquina virtual Debian parasita (`com.android.virtualization.terminal`).
+      - DEX/JIT: Threading do compilador ART fixado para os 8 threads do i7.
 - **Caminhos / Hashes**:
   - Workflow: `.github/workflows/build-kernel.yml`
   - Script de patch: `scripts/patch-upstream-kernel.py`
+  - Script de otimização: `scripts/optimize.sh` (implantado em `GBOSSYS/gbos/optimize.sh`)
   - `BOOTX64.EFI` SHA-256: `96bceca9484468fead7cfb55b2571a1a18698339e455a24120c5618060ba42a9`
   - `gbos-build-id`: `6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`
 - **Decisões**:
   - Compilar via GitHub Actions respeitando a Constituição (Regra 7) e a skill `compilacao-github-cli`.
   - Drivers de controle e joystick compilados diretamente dentro do kernel (`=y`) para estarem prontos imediatamente no boot sem depender de carga de módulos do Android.
+  - Otimizações de CPU, GPU, RAM, I/O e mitigação de ANR implementadas no serviço nativo `optimize.sh` disparado pelo init no `sys.boot_completed=1`.
 - **Avisos / Pendências**:
-  - O sistema está pronto para reinicialização e teste de hardware pelo usuário.
-- **PRÓXIMO AGENTE**: Flash (Gemini 3.8 Flash, High) — Relato do usuário e próximos passos de otimização.
+  - O sistema está 100% pronto para reinicialização e teste de hardware pelo usuário.
+- **PRÓXIMO AGENTE**: Flash (Gemini 3.8 Flash, High) — Relato do usuário e avaliação dos resultados no GooglebookOS.

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Hardware Optimization Service `scripts/optimize.sh` deployed to `GBOSSYS/gbos/optimize.sh`, automatically executed as root on `sys.boot_completed=1` to tune CPU Intel P-State/EPP, Intel RAPL limits (PL1 22W / PL2 35W), Intel UHD 620 GPU clock floor (500 MHz), RAM (vm.swappiness=10, vfs_cache_pressure=50), and NVMe I/O queue (`none` scheduler, 512 KB read-ahead).
 - Cloud CI kernel build workflow `.github/workflows/build-kernel.yml` and patch script `scripts/patch-upstream-kernel.py` to compile custom Linux kernel `6.18.21-gbos-whl` build #44 on GitHub Actions.
 - Second hardware test report documenting SSD NVMe dual-boot execution and troubleshooting on HP Elite c1030 (`jinlon`) in `docs/test-reports/2026-11-03-ssd-nvme-boot.md`.
 - Isolated dual-boot installation script `scripts/install-to-partition.sh` with non-destructive guards and automated EFI GOP framebuffer protection.
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive troubleshooting and emergency recovery documentation in `docs/TROUBLESHOOTING.md` and `docs/INSTALL-ISOLATED.md`.
 
 ### Changed
+- Deactivated parasitic KVM exit ftrace loop in `GBOSSYS/gbos/hook.sh` (guarded with `KVM_TRACE=1`), eliminating 17.6 MB disk I/O and continuous CPU context-switch overhead during boot.
 - Built-in kernel configuration:
   - Built-in gamepad support: `CONFIG_INPUT_JOYDEV=y`, `CONFIG_JOYSTICK_XPAD=y`, `CONFIG_JOYSTICK_XPAD_FF=y`, `CONFIG_JOYSTICK_XPAD_LEDS=y`, `CONFIG_INPUT_UINPUT=y` in `BOOTX64.EFI`.
   - Compiled and synchronized matching modules for ACPI thermal management (`int340x_thermal_zone`, `acpi_thermal_rel`, `processor_thermal_mbox`, `x86_pkg_temp_thermal`, `intel_rapl`) matching build ID `6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`.
