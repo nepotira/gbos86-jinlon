@@ -29,9 +29,9 @@ HOME_REGEX="/home/${CURRENT_USER}\b"
 for f in "${FILES[@]}"; do
     [ -e "$f" ] || continue
 
-    # 1. Block .agents/memory/ files
-    if [[ "$f" == .agents/memory/* ]]; then
-        echo "[BLOCKED] Memory file must not be committed: $f" >&2
+    # 1. Block .agents/memory/ raw dumps and binary backups (allow markdown memory docs)
+    if [[ "$f" == .agents/memory/* ]] && [[ "$f" != .agents/memory/*.md ]]; then
+        echo "[BLOCKED] Raw memory dump or binary backup file must not be committed: $f" >&2
         FAIL=1
         continue
     fi
@@ -53,8 +53,8 @@ for f in "${FILES[@]}"; do
         continue
     fi
 
-    # Skip self-inspection of the scanner and rules files that document these exact terms
-    if [[ "$f" == "scripts/scan-sensitive.sh" ]] || [[ "$f" == .agents/rules/* ]] || [[ "$f" == .agents/skills/* ]] || [[ "$f" == .agents/workflows/* ]]; then
+    # Skip self-inspection of the scanner, rules, and memory markdown docs that document these exact terms
+    if [[ "$f" == "scripts/scan-sensitive.sh" ]] || [[ "$f" == .agents/rules/* ]] || [[ "$f" == .agents/skills/* ]] || [[ "$f" == .agents/workflows/* ]] || [[ "$f" == .agents/memory/*.md ]]; then
         # Still check for actual home path and real tokens/MACs/UUIDs in rules/scripts
         if grep -E -i -n "(ghp_[A-Za-z0-9]{10,}|gho_[A-Za-z0-9]{10,}|github_pat_[A-Za-z0-9_]{10,}|BEGIN [A-Z0-9 ]*PRIVATE KEY)" "$f" >/dev/null 2>&1; then
             echo "[BLOCKED] Real token or private key detected in $f" >&2

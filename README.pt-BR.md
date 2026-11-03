@@ -23,16 +23,21 @@ Todos os componentes abaixo permanecem como `not tested` até que sejam verifica
 | Componente | Status | Notas / Evidências |
 | :--- | :--- | :--- |
 | Boot (USB live / instalador) | **Works** | Verificado em teste de live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
-| Boot (partição dedicada no NVMe) | `not tested` | Aguardando teste de instalação em partição |
-| Tela (painel 3:2, resolução, escala) | **Works** | Verificado em 1920x1280 (`DENSITY=180`) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Boot (partição dedicada no NVMe) | **Works** | Verificado em teste de dual-boot no SSD ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Tela (painel 3:2, resolução, escala) | **Partial** | Aceleração Vulkan via hardware funcional; `DENSITY=180` causa blur por escala fracionada ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Controle de brilho (tela e teclado) | `not tested` | Aguardando verificação explícita |
+| Controle Térmico e Ventoinha | **Broken** | Módulos ACPI térmicos falham ao carregar; EC do Chromebook aciona ventoinha em 100% ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Touchscreen e caneta USI | **Partial** | Touchscreen funcionando; caneta USI não testada (sem hardware) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Touchpad e teclado | **Works** | Touchpad responsivo com suporte a gestos ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Áudio — Alto-falantes internos (`max98357a`) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Áudio — Conector P2 3.5mm (`rt5682`) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Áudio — Microfone interno (SOF DMIC) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Wi-Fi (`iwlwifi` / AX201) | **Works** | Verificado em funcionamento no live USB ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
-| Bluetooth | **Works** | Verificado em funcionamento no live USB (`8087:0026`) ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Bluetooth | **Works** | Verificado em funcionamento no live USB e SSD (`8087:0026`) ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Controle / Gamepad (Bluetooth HID) | **Works** | Verificado em funcionamento (Gamesir Nova Lite via BT) ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Controle / Gamepad (Dongle USB 2.4G) | **Broken** | Módulo `joydev.ko` falha ao carregar (`Exec format error`) ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Compatibilidade ARM (64-bit `arm64-v8a`) | **Works** | Clash Royale e Ibis Paint X funcionais ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Compatibilidade ARM (32-bit `armeabi-v7a`) | **Broken** | Lista de ABIs é puramente 64-bit; apps 32-bit fecham/falham ([relatório](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Giroscópio / Auto-rotação de tela | **Broken** | HAL de sensores falha ao detectar sensores de orientação ([relatório](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Webcam | `not tested` | Aguardando teste em hardware |
 | USB-C / Thunderbolt / carregamento PD | `not tested` | Aguardando teste em hardware |

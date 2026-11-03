@@ -1,5 +1,9 @@
-# Agent local memory (never versioned)
-.agents/memory/
+# Agent raw backups and system dumps in memory (never versioned)
+.agents/memory/esp-backup/
+.agents/memory/*.bin
+.agents/memory/*.txt
+.agents/memory/baseline/
+.agents/memory/gbos.cfg.orig
 
 # Build directories and artifacts
 build/
