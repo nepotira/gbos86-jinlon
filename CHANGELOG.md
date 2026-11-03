@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Cloud CI kernel build workflow `.github/workflows/build-kernel.yml` and patch script `scripts/patch-upstream-kernel.py` to compile custom Linux kernel `6.18.21-gbos-whl` build #44 on GitHub Actions.
 - Second hardware test report documenting SSD NVMe dual-boot execution and troubleshooting on HP Elite c1030 (`jinlon`) in `docs/test-reports/2026-11-03-ssd-nvme-boot.md`.
 - Isolated dual-boot installation script `scripts/install-to-partition.sh` with non-destructive guards and automated EFI GOP framebuffer protection.
 - Architecture Decision Records:
@@ -16,11 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive troubleshooting and emergency recovery documentation in `docs/TROUBLESHOOTING.md` and `docs/INSTALL-ISOLATED.md`.
 
 ### Changed
+- Built-in kernel configuration:
+  - Built-in gamepad support: `CONFIG_INPUT_JOYDEV=y`, `CONFIG_JOYSTICK_XPAD=y`, `CONFIG_JOYSTICK_XPAD_FF=y`, `CONFIG_JOYSTICK_XPAD_LEDS=y`, `CONFIG_INPUT_UINPUT=y` in `BOOTX64.EFI`.
+  - Compiled and synchronized matching modules for ACPI thermal management (`int340x_thermal_zone`, `acpi_thermal_rel`, `processor_thermal_mbox`, `x86_pkg_temp_thermal`, `intel_rapl`) matching build ID `6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`.
+- Framebuffer scaling:
+  - Set `DENSITY=160` (1:1 integer pixel mapping) in `gbos.cfg` on `GBOSSYS` to eliminate font blur caused by fractional 1.125x scaling (`DENSITY=180`).
 - Updated hardware matrix in `README.md` and `README.pt-BR.md`:
   - NVMe SSD partition boot: marked as **Works**.
   - Bluetooth Gamepad (Gamesir Nova Lite): marked as **Works**.
-  - Thermal / fan control: marked as **Broken** (module `Exec format error`, EC running fan at 100%).
-  - USB Gamepad 2.4G wireless dongle: marked as **Broken** (`joydev.ko` module load failure).
+  - Thermal / fan control: marked as **Fixed in build #44** (awaiting boot verification).
+  - USB Gamepad 2.4G wireless dongle: marked as **Fixed in build #44** (awaiting boot verification).
   - 64-bit ARM apps (`arm64-v8a`): marked as **Works** (Clash Royale, Ibis Paint X).
   - 32-bit ARM apps (`armeabi-v7a`): marked as **Broken** (ABI whitelist is pure 64-bit).
 

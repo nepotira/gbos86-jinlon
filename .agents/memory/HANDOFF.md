@@ -211,4 +211,32 @@
   - Propor ajuste de `DENSITY=160` em `gbos.cfg` para testar nitidez nativa sem escala fracionada.
 - **Avisos / Pendências**:
   - PR #6 atualizado e pronto para merge.
-- **PRÓXIMO AGENTE**: Flash/Argon conforme instrução do usuário.
+- **PRÓXIMO AGENTE**: Flash (Gemini 3.8 Flash, High) — ETAPA 8 (Execução dos Passos 1 e 2 do plano de otimização).
+
+
+## [2026-11-03] ETAPA 8 — Otimização de Resolução e Compilação do Kernel Customizado via GitHub Actions
+- **Agente**: Argon (Gemini 4 Argon, Medium)
+- **Feito**:
+  - **Passo 1 (Resolução/Densidade)**: Montada a partição `GBOSSYS` (`/dev/nvme0n1p4`), alterada a linha `DENSITY=180` para `DENSITY=160` em `gbos/gbos.cfg`, executado `sync` e desmontada a partição.
+  - **Passo 2 (Compilação Cloud & Drivers)**:
+    - Criado workflow `.github/workflows/build-kernel.yml` e script `scripts/patch-upstream-kernel.py` para compilar o kernel `6.18.21-gbos-whl` no GitHub Actions.
+    - Corrigido o download dos fontes do kernel AOSP comum utilizando clone raso nativo (`git fetch --depth 1 origin $KSRC_COMMIT`) para evitar truncamento em endpoints dinâmicos do Google Gitiles.
+    - Alinhado caminho do compilador Clang para `clang-r584948b` e tolerância a drivers estáticos em `make_stage0_initramfs.sh`.
+    - Executado build na nuvem com sucesso absoluto: [Run 41600493295](https://github.com/nepotira/gbos86-jinlon/actions/runs/41600493295) (duração 48m23s).
+    - Verificadas as configurações no kernel gerado (#44): `CONFIG_INPUT_JOYDEV=y`, `CONFIG_JOYSTICK_XPAD=y`, `CONFIG_JOYSTICK_XPAD_FF=y`, `CONFIG_JOYSTICK_XPAD_LEDS=y`, `CONFIG_INPUT_UINPUT=y`.
+    - Baixados os artefatos (`BOOTX64.EFI`, `modules.tar.gz`, `SHA256SUMS.txt`) e validada a integridade criptográfica SHA-256 (`96bceca9484468fead7cfb55b2571a1a18698339e455a24120c5618060ba42a9`).
+    - Feito backup preventivo do `BOOTX64.EFI` e módulos antigos para `.bak`.
+    - Implantado o novo `BOOTX64.EFI` em `/boot/efi/EFI/gbos/BOOTX64.EFI` e em `GBOSSYS/EFI/BOOT/BOOTX64.EFI`.
+    - Extraída a nova árvore de módulos assinados correspondentes ao build #44 (`build-id: 6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`) em `GBOSSYS/gbos/modules/lib/modules/6.18.21-gbos-whl/`.
+    - Sincronizados os discos e desmontado `GBOSSYS` com sucesso.
+- **Caminhos / Hashes**:
+  - Workflow: `.github/workflows/build-kernel.yml`
+  - Script de patch: `scripts/patch-upstream-kernel.py`
+  - `BOOTX64.EFI` SHA-256: `96bceca9484468fead7cfb55b2571a1a18698339e455a24120c5618060ba42a9`
+  - `gbos-build-id`: `6c5cc6d87ca56a8f9f8824dad71209a893d64e43a565a317a99879075dc9b855`
+- **Decisões**:
+  - Compilar via GitHub Actions respeitando a Constituição (Regra 7) e a skill `compilacao-github-cli`.
+  - Drivers de controle e joystick compilados diretamente dentro do kernel (`=y`) para estarem prontos imediatamente no boot sem depender de carga de módulos do Android.
+- **Avisos / Pendências**:
+  - O sistema está pronto para reinicialização e teste de hardware pelo usuário.
+- **PRÓXIMO AGENTE**: Flash (Gemini 3.8 Flash, High) — Relato do usuário e próximos passos de otimização.
