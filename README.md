@@ -23,16 +23,21 @@ Every component below defaults to `not tested` until verified on real hardware w
 | Component | Status | Notes / Evidence |
 | :--- | :--- | :--- |
 | Boot (USB live / installer) | **Works** | Verified in live USB test ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
-| Boot (NVMe dedicated partition) | `not tested` | Pending partition installation test |
-| Display (3:2 panel, resolution, scaling) | **Works** | Verified at 1920x1280 (`DENSITY=180`) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Boot (NVMe dedicated partition) | **Works** | Verified in SSD dual-boot test ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Display (3:2 panel, resolution, scaling) | **Partial** | Hardware Vulkan acceleration works; `DENSITY=180` introduces fractional scaling blurriness ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Backlight control (screen & keyboard) | `not tested` | Pending explicit verification |
+| Thermal & Fan Control | **Broken** | ACPI thermal modules fail to load; ChromeOS EC defaults fan to 100% ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Touchscreen & USI stylus | **Partial** | Touchscreen works; USI stylus not tested (no hardware) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Touchpad & keyboard | **Works** | Touchpad responsive with gestures ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Audio — Internal speakers (`max98357a`) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Audio — 3.5mm headset jack (`rt5682`) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Audio — Internal microphone (SOF DMIC) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Wi-Fi (`iwlwifi` / AX201) | **Works** | Verified working in live USB ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
-| Bluetooth | **Works** | Verified working in live USB (`8087:0026`) ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
+| Bluetooth | **Works** | Verified working in live USB and SSD (`8087:0026`) ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Gamepad (Bluetooth HID) | **Works** | Verified working (Gamesir Nova Lite via BT) ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| Gamepad (2.4G USB Dongle) | **Broken** | `joydev.ko` module load failure (`Exec format error`) ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| ARM Compatibility (64-bit `arm64-v8a`) | **Works** | Clash Royale, Ibis Paint X verified ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
+| ARM Compatibility (32-bit `armeabi-v7a`) | **Broken** | Whitelist is 64-bit only; 32-bit APKs crash or fail ([report](docs/test-reports/2026-11-03-ssd-nvme-boot.md)) |
 | Auto-Rotate / Gyroscope | **Broken** | Sensor HAL fails to detect orientation sensors ([report](docs/test-reports/2026-10-29-live-usb-boot.md)) |
 | Webcam | `not tested` | Pending hardware test |
 | USB-C / Thunderbolt / PD charging | `not tested` | Pending hardware test |

@@ -190,3 +190,25 @@
 - **Avisos / Pendências**:
   - Boot do SSD pelo gbOS86 já ocorreu com sucesso (registrado em `nvme0n1p4` `/gbos/logs/boot-1/`).
 - **PRÓXIMO AGENTE**: Flash (Gemini 3.8 Flash, High) — ETAPA 8 (registrar relatório de teste do SSD, atualizar matrizes, merge do PR #6 e release v0.3.0).
+
+
+## [2026-11-03] ETAPA 8 — Registro de Teste do SSD NVMe e Análise Técnica
+- **Agente**: Flash (Gemini 3.8 Flash, High)
+- **Feito**:
+  - Inspecionados os logs de boot do SSD (`boot-2` e `boot-3`) em `nvme0n1p4`.
+  - Investigadas as 5 constatações do usuário:
+    1. Ventoinha a 100%: Módulos térmicos ACPI (`int340x_thermal_zone.ko`, `processor_thermal_mbox.ko`, `x86_pkg_temp_thermal.ko`) falham com `Exec format error` por incompatibilidade com a `struct module` do kernel customizado, acionando o modo fail-safe do EC do Chromebook.
+    2. Dongle Gamesir Nova Lite: O receptor USB 2.4G foi detectado, mas o driver `joydev.ko` também falha com `Exec format error`. O Bluetooth funciona normalmente porque utiliza a pilha userspace Bluetooth HID (`uhid`).
+    3. Resolução / Renderização: Aceleração Vulkan Graphite está ativa em 1920x1280, mas `DENSITY=180` força escala fracionada (1.125x) gerando blur em fontes e bordas de UI.
+    4. Compatibilidade ARM: Whitelist de ABIs do sistema é puramente 64-bit (`x86_64,arm64-v8a`; `ro.product.cpu.abilist32=''`). Aplicativos 32-bit (`armeabi-v7a`) falham ao abrir. Aplicativos pesados de edição de vídeo (CapCut) esbarram em limitações do bridge para MediaCodec/C2, gerando ANR.
+    5. Carga de CPU: Agravada pela execução de máquina virtual Debian (`com.android.virtualization.terminal` / `crosvm_debian`) e rastreamento KVM.
+  - Criado relatório `docs/test-reports/2026-11-03-ssd-nvme-boot.md`.
+  - Atualizadas as matrizes no `README.md` e `README.pt-BR.md`.
+  - Atualizado `CHANGELOG.md` na seção `[Unreleased]`.
+- **Caminhos**:
+  - Relatório: `docs/test-reports/2026-11-03-ssd-nvme-boot.md`
+- **Decisões**:
+  - Propor ajuste de `DENSITY=160` em `gbos.cfg` para testar nitidez nativa sem escala fracionada.
+- **Avisos / Pendências**:
+  - PR #6 atualizado e pronto para merge.
+- **PRÓXIMO AGENTE**: Flash/Argon conforme instrução do usuário.

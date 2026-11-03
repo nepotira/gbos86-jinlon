@@ -1,10 +1,10 @@
 # Project State (STATE)
 
-- **Etapa Atual**: ETAPA 7B (Diagnóstico e Resolução Forense de Incidente de Boot Host — GRUB / UEFI GOP) — Concluída
+- **Etapa Atual**: ETAPA 8 (Registro de Hardware do Boot no SSD, Análise Forense e Próximos Ajustes) — Em Conclusão
 - **Última Ação**:
-  - Diagnosticada e resolvida a causa raiz da tela preta no retorno ao Zorin OS (`recordfail=1` forçava `linux_gfx_mode=text` no GRUB, desativando o framebuffer EFI GOP no firmware MrChromebox EDK2 UEFI).
-  - Confirmada integridade física e lógica total de `nvme0n1p1` a `p6` (0 erros).
-  - Criado ADR-0003 (`docs/decisions/0003-uefi-gop-grub-black-screen.md`), atualizado `docs/TROUBLESHOOTING.md`, `docs/INSTALL-ISOLATED.md` e adicionada blindagem preventiva em `scripts/install-to-partition.sh`.
-  - Zorin OS inicializando perfeitamente com `GRUB_GFXPAYLOAD_LINUX=keep`.
+  - Analisados os logs de boot do SSD (`boot-2` e `boot-3`), identificando causas para as 5 ocorrências relatadas pelo usuário: falha de módulos térmicos (`int340x_thermal_zone.ko`, etc. com `Exec format error`) causando ventoinha a 100%, falha de `joydev.ko` para o dongle USB (enquanto Bluetooth HID funciona), escala fracionada de `DENSITY=180` (1.125x) causando blur visual, e lista restrita de ABIs a 64-bit (`x86_64,arm64-v8a`) sem suporte a 32-bit (`ro.product.cpu.abilist32=''`).
+  - Criado o relatório de teste `docs/test-reports/2026-11-03-ssd-nvme-boot.md`.
+  - Atualizadas as matrizes de compatibilidade em `README.md` e `README.pt-BR.md`.
+  - Atualizado `CHANGELOG.md` na seção `[Unreleased]`.
 - **Bloqueios**: Nenhum.
-- **Próximos Passos**: Executar a **ETAPA 8** com o agente **Flash (High)** para registrar o relatório de teste de boot pelo SSD (`nvme0n1p4` `/gbos/logs/boot-1/`), atualizar as matrizes de compatibilidade, fazer merge do PR #6 e publicar a release `v0.3.0`.
+- **Próximos Passos**: Enviar commits para `feat/isolated-install`, fazer merge do PR #6 na `main`, rodar `/release` para publicar `v0.3.0` e, opcionalmente, testar ajustes em `gbos.cfg` (como `DENSITY=160` para eliminar o blur).
