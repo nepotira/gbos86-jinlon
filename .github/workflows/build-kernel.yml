@@ -1,0 +1,109 @@
+name: Build Kernel (Jinlon / Comet Lake)
+
+on:
+  workflow_dispatch:
+    inputs:
+      extra_configs:
+        description: 'Additional kernel config flags (space separated, e.g. FOO=y BAR=m)'
+        required: false
+        default: ''
+
+jobs:
+  build-kernel:
+    name: Compile Custom WHL/CML Kernel
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+
+    steps:
+      - name: Free Disk Space on Runner
+        run: |
+          echo "Initial disk space:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          echo "Reclaimed disk space:"
+          df -h
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Clone upstream gbos-x86
+        run: |
+          git clone --depth 1 https://github.com/linuxkid473/gbos-x86.git /tmp/gbos-x86
+
+      - name: Patch configure_whl.py with Jinlon Overrides
+        run: |
+          python3 - << 'PYEOF'
+          import sys
+
+          path = "/tmp/gbos-x86/kernel/configure_whl.py"
+          with open(path, "r", encoding="utf-8") as f:
+              content = f.read()
+
+          target = "'KSU_X86_PATCH_SYSCALL_DISPATCHER': 'y',"
+          overrides = """'KSU_X86_PATCH_SYSCALL_DISPATCHER': 'y',
+              # Jinlon thermal management & ChromeOS EC (prevent 100% fail-safe fan)
+              'INTEL_RAPL': 'y',
+              'X86_PKG_TEMP_THERMAL': 'y',
+              'INT340X_THERMAL': 'y',
+              'INT3400_THERMAL': 'y',
+              'INTEL_PCH_THERMAL': 'y',
+              'CHROME_PLATFORMS': 'y',
+              'CROS_EC': 'y',
+              'CROS_EC_LPC': 'y',
+              'CROS_EC_SYSFS': 'y',
+              # Gamepad input drivers (Gamesir Nova Lite 2.4G dongle / xpad / joydev)
+              'INPUT_JOYDEV': 'y',
+              'JOYSTICK_XPAD': 'y',
+              'JOYSTICK_XPAD_FF': 'y',
+              'JOYSTICK_XPAD_LEDS': 'y',
+              'INPUT_UINPUT': 'y',"""
+
+          if target not in content:
+              print(f"ERROR: Could not locate target in {path}", file=sys.stderr)
+              sys.exit(1)
+
+          new_content = content.replace(target, overrides, 1)
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(new_content)
+
+          print("Successfully patched configure_whl.py with Jinlon overrides.")
+          PYEOF
+          grep -C 5 "INT340X_THERMAL" /tmp/gbos-x86/kernel/configure_whl.py
+
+      - name: Fetch Busybox and Build Docker Container
+        run: |
+          cd /tmp/gbos-x86
+          sh tools/fetch_busybox.sh
+          docker build -t gbos-kbuild kernel/docker
+
+      - name: Fetch Kernel Sources and Toolchain
+        run: |
+          cd /tmp/gbos-x86
+          sh kernel/fetch_kernel_sources.sh
+
+      - name: Compile Kernel and Stage0 Initramfs
+        run: |
+          cd /tmp/gbos-x86
+          sh kernel/build_kernel.sh
+
+      - name: Prepare Artifacts and Checksums
+        run: |
+          mkdir -p /tmp/artifacts
+          cp /tmp/gbos-x86/usb/out/BOOTX64.EFI /tmp/artifacts/BOOTX64.EFI
+          cd /tmp/artifacts
+          sha256sum BOOTX64.EFI | tee SHA256SUMS.txt
+          tar -czf /tmp/artifacts/modules.tar.gz -C /tmp/gbos-x86/usb modules/
+          ls -lh /tmp/artifacts
+
+      - name: Upload Kernel Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbos-kernel-jinlon
+          path: /tmp/artifacts/
+          retention-days: 7
