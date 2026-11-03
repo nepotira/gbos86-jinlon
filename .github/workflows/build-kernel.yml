@@ -1,6 +1,11 @@
 name: Build Kernel (Jinlon / Comet Lake)
 
 on:
+  push:
+    branches:
+      - feat/isolated-install
+    paths:
+      - '.github/workflows/build-kernel.yml'
   workflow_dispatch:
     inputs:
       extra_configs:
